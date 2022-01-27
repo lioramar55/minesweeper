@@ -3,6 +3,7 @@
 var gSound = false;
 var gInterval, gCounter, gElSecs, gElMins;
 var gSecs, gMins;
+var gElBombCount, gElEmoji;
 var gElCell, gElBoard;
 
 function toggleSound(elImg) {
@@ -41,7 +42,7 @@ function renderBoard() {
       var cell = gBoard[i][j];
       var size = boardDimension / gLevel.size;
       var className = `cell cell-${i}-${j}` + `${cell.isShown ? ' exposed' : ''}`;
-      // className += cell.isMine ? ' mine' : '';
+      if (!gGame.isOn) className += cell.isMine ? ' mine' : '';
       var style = `width:${size}em; height:${size}em`;
       var clickHandler = `cellClicked(this, ${i}, ${j})`;
       strHTML += `<td><div onclick="${clickHandler}" style = "${style}" class="${className}">${cell.minesAroundCount}</div></td>`;

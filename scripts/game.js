@@ -1,5 +1,4 @@
 'use strict';
-var gElBombCount;
 var gGame = {
   isOn: false,
   shownCount: 0,
@@ -14,20 +13,26 @@ var gLevels = [
 
 var gLevel = gLevels[0];
 var gBoard;
+
 function init() {
-  gGame.isOn = true;
   gBoard = buildBoard(gLevel);
-  console.log('gBoard', gBoard);
+  if (gInterval) clearInterval(gInterval);
   loadElements();
   renderBoard();
   gElBombCount.innerText = gLevel.mines;
 }
 
 function loadElements() {
+  gInterval = null;
+  gGame.isOn = true;
   gElBombCount = document.querySelector('.bomb-count');
+  gElEmoji = document.querySelector('.emoji');
   gElMins = document.querySelector('.minutes');
   gElSecs = document.querySelector('.seconds');
   gElBoard = document.querySelector('.board');
+  gElEmoji.src = 'imgs/start.png';
+  gElMins.innerText = '00';
+  gElSecs.innerText = '00';
 }
 
 function setMinesNegsCount(board, cellCoord) {
@@ -48,17 +53,30 @@ function setMinesNegsCount(board, cellCoord) {
 function cellClicked(elCell, i, j) {
   if (!gGame.isOn) return;
   if (!gInterval) startCounter();
-  if (!gBoard[i][j].isMine) expandShown(elCell, i, j);
-  else {
-    elCell.classList.add('mine');
-    gameOver();
-  }
+  if (!gBoard[i][j].isMine) {
+    if (!gBoard[i][j].minesAroundCount) expandShown(i, j);
+    else gBoard[i][j].isShown = true;
+  } else gameOver();
+  renderBoard();
 }
 
 function cellMarked(elCell, i, j) {}
 
-function expandShown(elCell, i, j) {
-  elCell.classList.add('exposed');
+function expandShown(i, j) {
+  if (gBoard[i][j].isShown) return;
+  if (gBoard[i][j].isMine) return;
+  gBoard[i][j].isShown = true;
+  for (var x = -1; x <= 1; x++) {
+    for (var y = -1; y <= 1; y++) {
+      var nI = x + i;
+      var nJ = y + j;
+      if (y === 0 && x === 0) continue;
+      if (nI >= 0 && nI < gLevel.size && nJ >= 0 && nJ < gLevel.size) {
+        if (gBoard[nI][nJ].minesAroundCount === 0) expandShown(nI, nJ);
+        else gBoard[nI][nJ].isShown = true;
+      }
+    }
+  }
 }
 
 function checkGameOver() {
@@ -71,15 +89,7 @@ function checkGameOver() {
 
 function gameOver() {
   clearInterval(gInterval);
+  gElEmoji.src = 'imgs/hit.png';
   gGame.isOn = false;
-  for (var i = 0; i < gLevel.size; i++) {
-    for (var j = 0; j < gLevel.size; j++) {
-      var cell = gBoard[i][j];
-      if (cell.isMine) {
-        var elCell = document.querySelector(`.cell-${i}-${j}`);
-        elCell.classList.add('mine');
-      }
-    }
-  }
-  console.log('game over');
+  renderBoard();
 }
