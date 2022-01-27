@@ -277,7 +277,7 @@ function manualMode() {
 }
 
 function safeClick(elBtn) {
-  if (!gInterval || !gGame.safeClicks) return;
+  if (!gInterval || !gGame.safeClicks || checkForHiddenBombs()) return;
   gGame.safeClicks--;
   elBtn.innerText = `Safe Click: ${gGame.safeClicks}`;
   var isOk = false;
@@ -312,4 +312,13 @@ function revealHint(i, j) {
     }
   }
   renderBoard();
+}
+
+function checkForHiddenBombs() {
+  for (var i = 0; i < gLevel.size; i++) {
+    for (var j = 0; j < gLevel.size; j++) {
+      if (gBoard[i][j].isMine && !gBoard[i][j].isShown) return true;
+    }
+  }
+  return false;
 }
