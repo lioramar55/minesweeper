@@ -73,6 +73,13 @@ function setMinesNegsCount(board, cellCoord) {
   }
   return count;
 }
+function countMinesAround() {
+  for (var i = 0; i < gLevel.size; i++) {
+    for (var j = 0; j < gLevel.size; j++) {
+      gBoard[i][j].minesAroundCount = setMinesNegsCount(gBoard, { i, j });
+    }
+  }
+}
 
 function cellClicked(elCell, i, j) {
   if (!gGame.isOn) return;
@@ -86,7 +93,7 @@ function cellClicked(elCell, i, j) {
       return;
     } else {
       startCounter();
-      randomizeMines();
+      randomizeMines(i, j);
       countMinesAround();
     }
   }
@@ -120,6 +127,31 @@ function cellClicked(elCell, i, j) {
   renderBoard();
 }
 
+function checkGameOver() {
+  var countShownCells = 0;
+  var countBlownBombs = 0;
+  for (var i = 0; i < gLevel.size; i++) {
+    for (var j = 0; j < gLevel.size; j++) {
+      if (gBoard[i][j].isShown && !gBoard[i][j].isMine) countShownCells++;
+      if (gBoard[i][j].isShown && gBoard[i][j].isMine) countBlownBombs++;
+    }
+  }
+  if (countBlownBombs === gLevel.mines) return;
+  if (countShownCells + gLevel.mines === gLevel.size ** 2) return true;
+}
+
+function gameOver() {
+  if (checkGameOver()) {
+    console.log('You Won');
+    clearInterval(gInterval);
+    gElEmoji.src = 'assets/imgs/win.png';
+    gGame.isOn = false;
+  } else {
+    clearInterval(gInterval);
+    gElEmoji.src = 'assets/imgs/hit.png';
+    gGame.isOn = false;
+  }
+}
 function cellMarked(elCell) {
   if (!gInterval) return;
   var cellCoord = getCoordByElement(elCell);
@@ -130,6 +162,7 @@ function cellMarked(elCell) {
     gBoard[cellCoord.i][cellCoord.j].isMarked = true;
     gGame.markedCount++;
   }
+  gElBombCount.innerText = gLevel.mines - gGame.markedCount;
 
   renderBoard();
 }
@@ -224,28 +257,4 @@ function revealHint(i, j) {
     }
   }
   renderBoard();
-}
-
-function checkGameOver() {
-  var countShownCells = 0;
-  for (var i = 0; i < gLevel.size; i++) {
-    for (var j = 0; j < gLevel.size; j++) {
-      if (gBoard[i][j].isShown && !gBoard[i][j].isMine) countShownCells++;
-    }
-  }
-  if (countShownCells + gLevel.mines === gLevel.size ** 2) return true;
-  return false;
-}
-
-function gameOver() {
-  if (checkGameOver()) {
-    console.log('You Won');
-    clearInterval(gInterval);
-    gElEmoji.src = 'assets/imgs/win.png';
-    gGame.isOn = false;
-  } else {
-    clearInterval(gInterval);
-    gElEmoji.src = 'assets/imgs/hit.png';
-    gGame.isOn = false;
-  }
 }
