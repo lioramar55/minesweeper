@@ -95,7 +95,7 @@ function countMinesAround() {
 }
 
 function cellClicked(elCell, i, j) {
-  if (!gGame.isOn) return;
+  if (!gGame.isOn || gBoard[i][j].isMarked) return;
   if (!gInterval) {
     if (gGame.isManual && !gBoard[i][j].isMine) {
       gElManualBtn.innerText = `Manual (${++gManualBombCount}/${gLevel.mines})`;
