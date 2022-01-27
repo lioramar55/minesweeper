@@ -48,7 +48,7 @@ function renderBoard() {
       var style = `width:${size}em; height:${size}em`;
       var clickHandler = `onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this)"`;
 
-      strHTML += `<td><div id=${cellId} onclick="${clickHandler}" style = "${style}" class="${className}">${cell.minesAroundCount}</div></td>`;
+      strHTML += `<td><div id=${cellId} ${clickHandler} style = "${style}" class="${className}">${cell.minesAroundCount}</div></td>`;
     }
     strHTML += '</tr>';
   }
