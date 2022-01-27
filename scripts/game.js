@@ -201,8 +201,8 @@ function gameOver(isPlayerWin) {
     gGame.isOn = false;
   }
 }
-function cellMarked(elCell) {
-  if (!gGame.isOn || !gInterval) return;
+function cellMarked(elCell, i, j) {
+  if (!gGame.isOn || !gInterval || gBoard[i][j].isShown) return;
   var cellCoord = getCoordByElement(elCell);
   if (gBoard[cellCoord.i][cellCoord.j].isMarked) {
     gBoard[cellCoord.i][cellCoord.j].isMarked = false;

@@ -41,7 +41,7 @@ function renderBoard() {
       var cellContent = gCoverImg;
       var cellId = `cell-${i}-${j}`;
       var className = `cell`;
-      var clickHandler = `onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this)"`;
+      var clickHandler = `onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this, ${i}, ${j})"`;
       var style = `width:${size}em; height:${size}em`;
 
       if (cell.isMarked) cellContent = gFlagImg;
