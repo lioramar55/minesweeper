@@ -1,4 +1,11 @@
 // utility functions
+
+function renderCell(i, j, value) {
+  var selector = `#cell-${i}-${j}`;
+  var cell = document.querySelector(selector);
+  console.log('value', value);
+  cell.innerHTML = `<img ${value} />`;
+}
 function inBounds(i, j, size) {
   if (i >= 0 && i < size && j >= 0 && j < size) return true;
   return false;

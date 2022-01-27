@@ -6,6 +6,7 @@ var gGame = {
   markedCount: 0,
   secsPassed: 0,
   hintsLeft: 3,
+  safeClicks: 3,
   lastMove: null,
   moves: [],
 };
@@ -167,6 +168,23 @@ function undoAction() {
   renderBoard();
 }
 
+function safeClick(elBtn) {
+  if (!gInterval || !gGame.safeClicks) return;
+  gGame.safeClicks--;
+  elBtn.innerText = `Safe Click: ${gGame.safeClicks}`;
+  var isOk = false;
+  while (!isOk) {
+    var randI = getRandomIntInclusive(0, gLevel.size - 1);
+    var randJ = getRandomIntInclusive(0, gLevel.size - 1);
+    var currCell = gBoard[randI][randJ];
+    if (!currCell.isShown && !currCell.isMine) {
+      isOk = true;
+      renderCell(randI, randJ, gEmptyImg);
+      setTimeout(renderCell, 1000, randI, randJ, gCoverImg);
+    }
+  }
+}
+
 function getHint(elBtn) {
   if (!gGame.hintsLeft || !gInterval) return;
   elBtn.innerText = `Hints: ${--gGame.hintsLeft}`;
@@ -180,6 +198,7 @@ function revealHint(i, j) {
       var nI = x + i;
       var nJ = j + y;
       if (y === 0 && x === 0) continue;
+      // if (gBoard[nI][nJ].isShown) continue;
       if (inBounds(nI, nJ, gLevel.size)) {
         gBoard[nI][nJ].isShown = gBoard[nI][nJ].isShown ? false : true;
       }
@@ -189,12 +208,14 @@ function revealHint(i, j) {
 }
 
 function checkGameOver() {
+  var countShownCells = 0;
   for (var i = 0; i < gLevel.size; i++) {
     for (var j = 0; j < gLevel.size; j++) {
-      if (!gBoard[i][j].isShown && !gBoard[i][j].isMine) return false;
+      if (gBoard[i][j].isShown && !gBoard[i][j].isMine) countShownCells++;
     }
   }
-  return true;
+  if (countShownCells + gLevel.mines === gLevel.size ** 2) return true;
+  return false;
 }
 
 function gameOver() {

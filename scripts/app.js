@@ -3,6 +3,11 @@
 var gSound = false;
 var gInterval, gCounter, gElSecs, gElMins;
 var gSecs, gMins;
+var gFlagImg = `<img src="assets/imgs/flag.png" />`;
+var gEmptyImg = `<img src="assets/imgs/empty.png" />`;
+var gCoverImg = `<img src="assets/imgs/cover.png" />`;
+var gBlackBomb = `<img src="assets/imgs/black-bomb.png" />`;
+var gRedBomb = `<img src="assets/imgs/red-bomb.png" />`;
 
 function toggleSound(elImg) {
   if (gSound) {
@@ -41,26 +46,25 @@ function renderBoard() {
     for (var j = 0; j < gLevel.size; j++) {
       var cell = gBoard[i][j];
       var size = boardDimension / gLevel.size;
-      var cellContent = `<img src="assets/imgs/cover.png"`;
-
+      var cellContent = gCoverImg;
       var cellId = `cell-${i}-${j}`;
       var className = `cell`;
       var clickHandler = `onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this)"`;
       var style = `width:${size}em; height:${size}em`;
 
-      if (cell.isMarked) cellContent = `<img src="assets/imgs/flag.png"`;
+      if (cell.isMarked) cellContent = gFlagImg;
       if (cell.isShown) {
         if (gHintMode) {
           cellContent = cell.minesAroundCount
             ? `<img src="assets/imgs/num${cell.minesAroundCount}.png"`
-            : `<img src="assets/imgs/black-bomb.png"`;
+            : gBlackBomb;
         }
         if (!cell.isMine) {
           cellContent = cell.minesAroundCount
             ? `<img src="assets/imgs/num${cell.minesAroundCount}.png"`
-            : `<img src="assets/imgs/empty.png"`;
-        } else cellContent = `<img src="assets/imgs/black-bomb.png"`;
-        if (!gGame.isOn) className += cell.isMine ? ' mine' : '';
+            : gEmptyImg;
+        } else cellContent = gBlackBomb;
+        if (!gGame.isOn && cell.isMine) cellContent = gRedBomb;
       }
       strHTML += `<td><div id=${cellId} ${clickHandler} style = "${style}" class="${className}">${cellContent}</div></td>`;
     }
