@@ -12,10 +12,12 @@ var gGame = {
   moves: [],
 };
 var gLevels = [
-  { size: 4, mines: 2 },
-  { size: 8, mines: 12 },
-  { size: 12, mines: 30 },
+  { name: 'easy', size: 4, mines: 2 },
+  { name: 'medium', size: 8, mines: 12 },
+  { name: 'hard', size: 12, mines: 30 },
 ];
+var gElBestTime;
+var gSevenBoomMode;
 var gManualBombCount, gElManualBtn;
 var gElBombCount, gElEmoji;
 var gElCell, gElBoard;
@@ -29,6 +31,7 @@ function init() {
   gBoard = buildBoard(gLevel);
   if (gInterval) clearInterval(gInterval);
   loadElements();
+  if (gSevenBoomMode) loadSevenBoomMode();
   renderBoard();
   gElBombCount.innerText = gLevel.mines;
 }
@@ -36,6 +39,7 @@ function init() {
 function loadElements() {
   gInterval = null;
   gGame.isOn = true;
+  gGame.secsPassed = 0;
   gGame.moves = [];
   gGame.lastMove = null;
   gGame.liveCount = 3;
@@ -52,6 +56,12 @@ function loadElements() {
   gElBoard = document.querySelector('.board');
   gElUndo = document.querySelector('.undo');
   gElManualBtn = document.querySelector('.manual');
+  gElBestTime = document.querySelector('.best-score');
+  if (localStorage.getItem(`best-time-${gLevel.name}`)) {
+    gElBestTime.innerText = localStorage.getItem(`best-time-${gLevel.name}`);
+  } else {
+    gElBestTime.innerText = `Not exist, Try to play...`;
+  }
   gManualBombCount = 0;
   gElManualBtn.innerText = `Manual (${gManualBombCount}/${gLevel.mines})`;
   gElEmoji.src = 'assets/imgs/start.png';
@@ -87,10 +97,10 @@ function countMinesAround() {
 function cellClicked(elCell, i, j) {
   if (!gGame.isOn) return;
   if (!gInterval) {
-    if (gGame.isManual) {
-      gElManualBtn.innerText = `Manual (${gManualBombCount}/${gLevel.mines})`;
+    if (gGame.isManual && !gBoard[i][j].isMine) {
+      gElManualBtn.innerText = `Manual (${++gManualBombCount}/${gLevel.mines})`;
       gBoard[i][j].isMine = true;
-      if (++gManualBombCount === gLevel.mines) {
+      if (gManualBombCount === gLevel.mines) {
         countMinesAround();
         startCounter();
       }
@@ -131,6 +141,25 @@ function cellClicked(elCell, i, j) {
   renderBoard();
 }
 
+function loadSevenBoomMode() {
+  var nums = numRange(1, gLevel.size ** 2, 1);
+  var res = [];
+  for (var i = 0; i < gLevel.size ** 2; i++) {
+    if (nums[i] % 7 === 0 || isNumberContainSeven(nums[i]) !== -1) res.push(nums[i]);
+  }
+  var counter = 0;
+  for (var i = 0; i < gLevel.size; i++) {
+    for (var j = 0; j < gLevel.size; j++) {
+      res.forEach((num) => {
+        if (counter === num) {
+          gBoard[i][j].isMine = true;
+        }
+      });
+      counter++;
+    }
+  }
+}
+
 function checkGameOver() {
   var countShownCells = 0;
   var countBlownBombs = 0;
@@ -150,6 +179,15 @@ function gameOver(isPlayerWin) {
     clearInterval(gInterval);
     gElEmoji.src = 'assets/imgs/win.png';
     gGame.isOn = false;
+    var bestTimeKey = `best-time-${gLevel.name}`;
+    if (!localStorage.getItem(bestTimeKey)) {
+      localStorage.setItem(bestTimeKey, gGame.secsPassed + ' seconds');
+    } else {
+      var lastTime = localStorage.getItem(bestTimeKey).split(' ');
+      if (gGame.secsPassed < lastTime[0]) {
+        localStorage.setItem(bestTimeKey, gGame.secsPassed + ' seconds');
+      }
+    }
   } else {
     clearInterval(gInterval);
     gElEmoji.src = 'assets/imgs/hit.png';
@@ -220,7 +258,12 @@ function undoAction() {
   renderBoard();
 }
 
+function sevenBoomMode() {
+  gSevenBoomMode = true;
+  init();
+}
 function manualMode() {
+  if (gGame.isOn) return;
   gGame.isManual = true;
 }
 

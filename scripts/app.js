@@ -88,6 +88,7 @@ function stopWatch() {
   gCounter += 0.01;
   if (gCounter >= 1) {
     gSecs++;
+    gGame.secsPassed++;
     gCounter = 0;
     gElSecs.innerText = '0' + gSecs;
   }

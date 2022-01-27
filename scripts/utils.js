@@ -26,3 +26,8 @@ function numRange(start, finish, step) {
 function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+function isNumberContainSeven(n) {
+  var s = n + '';
+  return s.split('').indexOf('7');
+}
