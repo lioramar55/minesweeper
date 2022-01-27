@@ -122,7 +122,6 @@ function getElementByCoord(coord) {
 }
 
 function getCoordByElement(el) {
-  console.log('el.id', el.id);
   var i = el.id.split('-')[1];
   var j = el.id.split('-')[2];
   return { i, j };
