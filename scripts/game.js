@@ -231,11 +231,16 @@ function expandShown(i, j) {
       if (nI >= 0 && nI < gLevel.size && nJ >= 0 && nJ < gLevel.size) {
         gGame.lastMove.push({ i: nI, j: nJ });
         gGame.shownCount++;
+        if (gBoard[nI][nJ].isMarked) {
+          gBoard[nI][nJ].isMarked = false;
+          gGame.markedCount--;
+        }
         if (gBoard[nI][nJ].minesAroundCount === 0) expandShown(nI, nJ);
         else gBoard[nI][nJ].isShown = true;
       }
     }
   }
+  gElBombCount.innerText = gLevel.mines - gGame.markedCount;
 }
 
 function undoAction() {
