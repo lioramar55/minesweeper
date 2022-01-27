@@ -29,8 +29,7 @@ function buildBoard(level) {
   }
   return board;
 }
-function placeAndCountMines() {
-  randomizeMines(gBoard);
+function countMinesAround() {
   for (var i = 0; i < gLevel.size; i++) {
     for (var j = 0; j < gLevel.size; j++) {
       gBoard[i][j].minesAroundCount = setMinesNegsCount(gBoard, { i, j });
@@ -108,14 +107,14 @@ function stopWatch() {
   }
 }
 
-function randomizeMines(board) {
+function randomizeMines() {
   var count = gLevel.mines;
   while (count) {
     var randI = getRandomIntInclusive(0, gLevel.size - 1);
     var randJ = getRandomIntInclusive(0, gLevel.size - 1);
-    if (board[randI][randJ].isMine) continue;
+    if (gBoard[randI][randJ].isMine) continue;
     else {
-      board[randI][randJ].isMine = true;
+      gBoard[randI][randJ].isMine = true;
       count--;
     }
   }

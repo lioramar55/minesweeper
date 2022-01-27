@@ -8,6 +8,7 @@ var gGame = {
   hintsLeft: 3,
   safeClicks: 3,
   lastMove: null,
+  isManual: false,
   moves: [],
 };
 var gLevels = [
@@ -15,6 +16,7 @@ var gLevels = [
   { size: 8, mines: 12 },
   { size: 12, mines: 30 },
 ];
+var gManualBombCount;
 var gElBombCount, gElEmoji;
 var gElCell, gElBoard;
 var gElLiveCount;
@@ -40,6 +42,7 @@ function loadElements() {
   gGame.markedCount = 0;
   gGame.shownCount = 0;
   gGame.hintsLeft = 3;
+  gGame.isManual = false;
   gElBombCount = document.querySelector('.bomb-count');
   gElEmoji = document.querySelector('.emoji');
   gElMins = document.querySelector('.minutes');
@@ -74,10 +77,22 @@ function setMinesNegsCount(board, cellCoord) {
 function cellClicked(elCell, i, j) {
   if (!gGame.isOn) return;
   if (!gInterval) {
-    startCounter();
-    placeAndCountMines();
+    if (gGame.isManual) {
+      if (++gManualBombCount === gLevel.mines) {
+        startCounter();
+        countMinesAround();
+      }
+      gBoard[i][j].isMine = true;
+      return;
+    } else {
+      startCounter();
+      randomizeMines();
+      countMinesAround();
+    }
   }
   if (gHintMode) {
+    var elBtn = document.querySelector('.hint');
+    elBtn.innerText = `Hints: ${--gGame.hintsLeft}`;
     setTimeout(revealHint, 1000, i, j);
     revealHint(i, j);
     gHintMode = false;
@@ -168,6 +183,11 @@ function undoAction() {
   renderBoard();
 }
 
+function manualMode() {
+  gGame.isManual = true;
+  gManualBombCount = 0;
+}
+
 function safeClick(elBtn) {
   if (!gInterval || !gGame.safeClicks) return;
   gGame.safeClicks--;
@@ -185,9 +205,8 @@ function safeClick(elBtn) {
   }
 }
 
-function getHint(elBtn) {
+function getHint() {
   if (!gGame.hintsLeft || !gInterval) return;
-  elBtn.innerText = `Hints: ${--gGame.hintsLeft}`;
   gHintMode = true;
 }
 

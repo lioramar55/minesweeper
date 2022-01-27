@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body onload="init()" oncontextmenu="return false;" >
+    <h1>Minesweeper</h1>
       <div class="info">
         <span><img class="sound icon" onclick="toggleSound(this)" src="assets/imgs/mute.png" /></span>
         <span class="live-count"></span>
@@ -28,10 +29,13 @@
           <button class="btn btn-levels" onclick="changeLevel(1)">Easy</button>
           <button class="btn btn-levels" onclick="changeLevel(2)">Medium</button>
           <button class="btn btn-levels" onclick="changeLevel(3)">Hard</button>
-          <button class="btn hint" onclick="getHint(this)">Hints: 3</button>
+          <button class="btn hint" onclick="getHint()">Hints: 3</button>
           <button class="btn undo" onclick="undoAction()">UNDO</button>
           <button class="btn safe" onclick="safeClick(this)">Safe Click: 3</button>
+          <button class="btn manual" onclick="manualMode()">Manual</button>
+          <button class="btn seven" onclick="sevenBoomMode()">7 BOOM!</button>
       </div>
+      <footer>Minesweeper by Lior Amar</footer>
       <script src="./scripts/utils.js"></script>
       <script src="./scripts/app.js"></script>
       <script src="./scripts/game.js"></script>
