@@ -58,7 +58,10 @@ function setMinesNegsCount(board, cellCoord) {
 
 function cellClicked(elCell, i, j) {
   if (!gGame.isOn) return;
-  if (!gInterval) startCounter();
+  if (!gInterval) {
+    startCounter();
+    placeAndCountMines();
+  }
   if (!gBoard[i][j].isMine) {
     if (!gBoard[i][j].minesAroundCount) expandShown(i, j);
     else gBoard[i][j].isShown = true;

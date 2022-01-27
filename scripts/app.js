@@ -22,13 +22,15 @@ function buildBoard(level) {
       board[i][j] = createCell();
     }
   }
-  randomizeMines(board);
+  return board;
+}
+function placeAndCountMines() {
+  randomizeMines(gBoard);
   for (var i = 0; i < gLevel.size; i++) {
     for (var j = 0; j < gLevel.size; j++) {
-      board[i][j].minesAroundCount = setMinesNegsCount(board, { i, j });
+      gBoard[i][j].minesAroundCount = setMinesNegsCount(gBoard, { i, j });
     }
   }
-  return board;
 }
 
 function renderBoard() {
