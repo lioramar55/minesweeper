@@ -272,7 +272,7 @@ function sevenBoomMode() {
   init();
 }
 function manualMode() {
-  if (!gGame.isOn) return;
+  if (!gGame.isOn || gSevenBoomMode) return;
   gGame.isManual = true;
 }
 
