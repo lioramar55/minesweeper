@@ -230,7 +230,7 @@ function expandShown(i, j) {
 }
 
 function undoAction() {
-  if (!gInterval || !gGame.shownCount) return;
+  if (!gInterval || !gGame.isOn || !gGame.shownCount) return;
   var lastMove = gGame.moves.pop();
   if (!lastMove.length) {
     var cell = gBoard[lastMove.i][lastMove.j];
@@ -263,7 +263,7 @@ function sevenBoomMode() {
   init();
 }
 function manualMode() {
-  if (gGame.isOn) return;
+  if (!gGame.isOn) return;
   gGame.isManual = true;
 }
 
