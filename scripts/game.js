@@ -134,6 +134,9 @@ function cellClicked(elCell, i, j) {
       gGame.shownCount++;
     }
   } else {
+    if (gBoard[i][j].isShown) {
+      return;
+    }
     gGame.liveCount--;
     gGame.moves.push({ i, j });
     gElLiveCount.innerText = `Lives: ${gGame.liveCount}`;
