@@ -19,6 +19,7 @@ function init() {
   if (gInterval) clearInterval(gInterval);
   loadElements();
   renderBoard();
+  addEventListenresToElements();
   gElBombCount.innerText = gLevel.mines;
 }
 
@@ -60,7 +61,13 @@ function cellClicked(elCell, i, j) {
   renderBoard();
 }
 
-function cellMarked(elCell, i, j) {}
+function cellMarked(elCell) {
+  // elCell.classList.add('mark');
+  var cellCoord = getCoordByElement(elCell);
+  console.log('cellCoord', cellCoord);
+  gBoard[cellCoord.i][cellCoord.j].isMarked = true;
+  renderBoard();
+}
 
 function expandShown(i, j) {
   if (gBoard[i][j].isShown) return;

@@ -41,17 +41,33 @@ function renderBoard() {
     for (var j = 0; j < gLevel.size; j++) {
       var cell = gBoard[i][j];
       var size = boardDimension / gLevel.size;
-      var className = `cell cell-${i}-${j}` + `${cell.isShown ? ' exposed' : ''}`;
+      var cellId = `cell-${i}-${j}`;
+      var className = `cell` + `${cell.isShown ? ' exposed' : ''}`;
       if (!gGame.isOn) className += cell.isMine ? ' mine' : '';
+      if (cell.isMarked) className += ' mark';
       var style = `width:${size}em; height:${size}em`;
-      var clickHandler = `cellClicked(this, ${i}, ${j})`;
-      strHTML += `<td><div onclick="${clickHandler}" style = "${style}" class="${className}">${cell.minesAroundCount}</div></td>`;
+      var clickHandler = `onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this)"`;
+
+      strHTML += `<td><div id=${cellId} onclick="${clickHandler}" style = "${style}" class="${className}">${cell.minesAroundCount}</div></td>`;
     }
     strHTML += '</tr>';
   }
   strHTML += '</table>';
   gElBoard.innerHTML = strHTML;
 }
+
+// function addEventListenresToElements() {
+//   for (var i = 0; i < gLevel.size; i++) {
+//     for (var j = 0; j < gLevel.size; j++) {
+//       var elCell = getElementByCoord({ i, j });
+//       elCell.addEventListener('contextmenu', (e) => {
+//         e.preventDefault();
+//         elCell.oncontextmenu = cellMarked(elCell);
+//         // return false;
+//       });
+//     }
+//   }
+// }
 
 function createCell() {
   return {
@@ -98,4 +114,16 @@ function randomizeMines(board) {
       count--;
     }
   }
+}
+
+function getElementByCoord(coord) {
+  var selector = `#cell-${coord.i}-${coord.j}`;
+  return document.querySelector(selector);
+}
+
+function getCoordByElement(el) {
+  console.log('el.id', el.id);
+  var i = el.id.split('-')[1];
+  var j = el.id.split('-')[2];
+  return { i, j };
 }
