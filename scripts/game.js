@@ -97,14 +97,16 @@ function countMinesAround() {
 function cellClicked(elCell, i, j) {
   if (!gGame.isOn || gBoard[i][j].isMarked) return;
   if (!gInterval) {
-    if (gGame.isManual && !gBoard[i][j].isMine) {
-      gElManualBtn.innerText = `Manual (${++gManualBombCount}/${gLevel.mines})`;
-      gBoard[i][j].isMine = true;
-      if (gManualBombCount === gLevel.mines) {
-        countMinesAround();
-        startCounter();
-      }
-      return;
+    if (gGame.isManual) {
+      if (!gBoard[i][j].isMine) {
+        gElManualBtn.innerText = `Manual (${++gManualBombCount}/${gLevel.mines})`;
+        gBoard[i][j].isMine = true;
+        if (gManualBombCount === gLevel.mines) {
+          countMinesAround();
+          startCounter();
+        }
+        return;
+      } else return;
     } else if (gSevenBoomMode) {
       startCounter();
       countMinesAround();
