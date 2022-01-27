@@ -65,14 +65,14 @@ body {
 }
 
 .cell.mark {
-  background: #fea;
+  background-color: #fea;
 }
 .cell.exposed {
   color: #333;
   background: #f7f7f7;
 }
 .cell.mine {
-  background: #f00;
+  background-color: #f00;
 }
 
 .btn-section {

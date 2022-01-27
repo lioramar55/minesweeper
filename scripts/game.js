@@ -1,6 +1,7 @@
 'use strict';
 var gGame = {
   isOn: false,
+  liveCount: 3,
   shownCount: 0,
   markedCount: 0,
   secsPassed: 0,
@@ -10,7 +11,9 @@ var gLevels = [
   { size: 8, mines: 12 },
   { size: 12, mines: 30 },
 ];
-
+var gElBombCount, gElEmoji;
+var gElCell, gElBoard;
+var gElLiveCount;
 var gLevel = gLevels[0];
 var gBoard;
 
@@ -25,12 +28,15 @@ function init() {
 function loadElements() {
   gInterval = null;
   gGame.isOn = true;
+  gGame.liveCount = 3;
   gElBombCount = document.querySelector('.bomb-count');
   gElEmoji = document.querySelector('.emoji');
   gElMins = document.querySelector('.minutes');
   gElSecs = document.querySelector('.seconds');
+  gElLiveCount = document.querySelector('.live-count');
   gElBoard = document.querySelector('.board');
   gElEmoji.src = 'imgs/start.png';
+  gElLiveCount.innerText = `Lives: ${gGame.liveCount}`;
   gElMins.innerText = '00';
   gElSecs.innerText = '00';
 }
@@ -56,15 +62,22 @@ function cellClicked(elCell, i, j) {
   if (!gBoard[i][j].isMine) {
     if (!gBoard[i][j].minesAroundCount) expandShown(i, j);
     else gBoard[i][j].isShown = true;
-  } else gameOver();
+  } else {
+    gGame.liveCount--;
+    gElLiveCount.innerText = `Lives: ${gGame.liveCount}`;
+    elCell.classList.add('mine');
+    gBoard[i][j].isShown = true;
+  }
+  if (!gGame.liveCount) gameOver();
   renderBoard();
 }
 
 function cellMarked(elCell) {
-  // elCell.classList.add('mark');
   var cellCoord = getCoordByElement(elCell);
-  console.log('cellCoord', cellCoord);
-  gBoard[cellCoord.i][cellCoord.j].isMarked = true;
+  if (gBoard[cellCoord.i][cellCoord.j].isMarked) {
+    gBoard[cellCoord.i][cellCoord.j].isMarked = false;
+  } else gBoard[cellCoord.i][cellCoord.j].isMarked = true;
+
   renderBoard();
 }
 

@@ -3,8 +3,6 @@
 var gSound = false;
 var gInterval, gCounter, gElSecs, gElMins;
 var gSecs, gMins;
-var gElBombCount, gElEmoji;
-var gElCell, gElBoard;
 
 function toggleSound(elImg) {
   if (gSound) {
@@ -41,12 +39,18 @@ function renderBoard() {
     for (var j = 0; j < gLevel.size; j++) {
       var cell = gBoard[i][j];
       var size = boardDimension / gLevel.size;
+
       var cellId = `cell-${i}-${j}`;
-      var className = `cell` + `${cell.isShown ? ' exposed' : ''}`;
-      if (!gGame.isOn) className += cell.isMine ? ' mine' : '';
-      if (cell.isMarked) className += ' mark';
-      var style = `width:${size}em; height:${size}em`;
+      var className = `cell`;
       var clickHandler = `onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this)"`;
+      var style = `width:${size}em; height:${size}em`;
+
+      if (cell.isMarked) className += ' mark';
+      if (cell.isShown) {
+        if (!cell.isMine) className += ' exposed';
+        else className += ' mine';
+      }
+      if (!gGame.isOn) className += cell.isMine ? ' mine' : '';
 
       strHTML += `<td><div id=${cellId} ${clickHandler} style = "${style}" class="${className}">${cell.minesAroundCount}</div></td>`;
     }
@@ -55,19 +59,6 @@ function renderBoard() {
   strHTML += '</table>';
   gElBoard.innerHTML = strHTML;
 }
-
-// function addEventListenresToElements() {
-//   for (var i = 0; i < gLevel.size; i++) {
-//     for (var j = 0; j < gLevel.size; j++) {
-//       var elCell = getElementByCoord({ i, j });
-//       elCell.addEventListener('contextmenu', (e) => {
-//         e.preventDefault();
-//         elCell.oncontextmenu = cellMarked(elCell);
-//         // return false;
-//       });
-//     }
-//   }
-// }
 
 function createCell() {
   return {
