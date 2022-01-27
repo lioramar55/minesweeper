@@ -57,11 +57,6 @@ function loadElements() {
   gElUndo = document.querySelector('.undo');
   gElManualBtn = document.querySelector('.manual');
   gElBestTime = document.querySelector('.best-score');
-  if (localStorage.getItem(`best-time-${gLevel.name}`)) {
-    gElBestTime.innerText = localStorage.getItem(`best-time-${gLevel.name}`);
-  } else {
-    gElBestTime.innerText = `Not exist, Try to play...`;
-  }
   gManualBombCount = 0;
   gElManualBtn.innerText = `Manual (${gManualBombCount}/${gLevel.mines})`;
   gElEmoji.src = 'assets/imgs/start.png';
@@ -69,6 +64,11 @@ function loadElements() {
   gElHint.innerText = `Hints: ${gGame.hintsLeft}`;
   gElMins.innerText = '00';
   gElSecs.innerText = '00';
+  if (localStorage.getItem(`best-time-${gLevel.name}`)) {
+    gElBestTime.innerText = localStorage.getItem(`best-time-${gLevel.name}`);
+  } else {
+    gElBestTime.innerText = `Not exist, Try to play...`;
+  }
   gGame.moves.push(clone2DArray(gBoard));
 }
 
@@ -105,6 +105,10 @@ function cellClicked(elCell, i, j) {
         startCounter();
       }
       return;
+    } else if (gSevenBoomMode) {
+      startCounter();
+      countMinesAround();
+      gSevenBoomMode = false;
     } else {
       startCounter();
       randomizeMines(i, j);
