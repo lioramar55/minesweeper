@@ -19,7 +19,6 @@ function init() {
   if (gInterval) clearInterval(gInterval);
   loadElements();
   renderBoard();
-  addEventListenresToElements();
   gElBombCount.innerText = gLevel.mines;
 }
 
