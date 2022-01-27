@@ -49,6 +49,7 @@ function renderBoard() {
 
       if (cell.isMarked) className += ' mark';
       if (cell.isShown) {
+        if (gHintMode) className += ' exposed';
         if (!cell.isMine) className += ' exposed';
         else className += ' mine';
       }
