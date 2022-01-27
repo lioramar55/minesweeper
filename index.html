@@ -9,16 +9,16 @@
   </head>
   <body onload="init()" oncontextmenu="return false;" >
       <div class="info">
-        <span><img class="sound icon" onclick="toggleSound(this)" src="./imgs/mute.png" /></span>
+        <span><img class="sound icon" onclick="toggleSound(this)" src="assets/imgs/mute.png" /></span>
         <span class="live-count"></span>
         <span>
-          <span><img class="icon emoji" onclick="init()" src="imgs/start.png"></span>
+          <span><img class="icon emoji" onclick="init()" src="assets/imgs/start.png"></span>
           <span class="bomb-count" ></span>
-          <span><img class="icon"src="./imgs/flag.png" /></span>
+          <span><img class="icon"src="assets/imgs/flag-title.png" /></span>
         </span>
         <span class="stopwatch">         
           <span class="minutes">00</span><span>:</span><span class="seconds">00</span>
-          <span><img class="icon" src="./imgs/timer.png" /></span>
+          <span><img class="icon" src="assets/imgs/timer.png" /></span>
         </span>
       </div>
     <div class="board">
@@ -29,7 +29,7 @@
           <button class="btn btn-levels" onclick="changeLevel(2)">Medium</button>
           <button class="btn btn-levels" onclick="changeLevel(3)">Hard</button>
           <button class="btn hint" onclick="getHint(this)">Hints: 3</button>
-          <button class="btn">UNDO</button>
+          <button class="btn undo" onclick="undoAction()">UNDO</button>
       </div>
       <script src="./scripts/utils.js"></script>
       <script src="./scripts/app.js"></script>

@@ -6,6 +6,8 @@ var gGame = {
   markedCount: 0,
   secsPassed: 0,
   hintsLeft: 3,
+  lastMove: null,
+  moves: [],
 };
 var gLevels = [
   { size: 4, mines: 2 },
@@ -16,6 +18,7 @@ var gElBombCount, gElEmoji;
 var gElCell, gElBoard;
 var gElLiveCount;
 var gElHint, gHintMode;
+var gElUndo, gUndo;
 var gLevel = gLevels[0];
 var gBoard;
 
@@ -30,7 +33,11 @@ function init() {
 function loadElements() {
   gInterval = null;
   gGame.isOn = true;
+  gGame.moves = [];
+  gGame.lastMove = null;
   gGame.liveCount = 3;
+  gGame.markedCount = 0;
+  gGame.shownCount = 0;
   gGame.hintsLeft = 3;
   gElBombCount = document.querySelector('.bomb-count');
   gElEmoji = document.querySelector('.emoji');
@@ -39,11 +46,13 @@ function loadElements() {
   gElHint = document.querySelector('.hint');
   gElLiveCount = document.querySelector('.live-count');
   gElBoard = document.querySelector('.board');
-  gElEmoji.src = 'imgs/start.png';
+  gElUndo = document.querySelector('.undo');
+  gElEmoji.src = 'assets/imgs/start.png';
   gElLiveCount.innerText = `Lives: ${gGame.liveCount}`;
   gElHint.innerText = `Hints: ${gGame.hintsLeft}`;
   gElMins.innerText = '00';
   gElSecs.innerText = '00';
+  gGame.moves.push(clone2DArray(gBoard));
 }
 
 function setMinesNegsCount(board, cellCoord) {
@@ -74,10 +83,18 @@ function cellClicked(elCell, i, j) {
     return;
   }
   if (!gBoard[i][j].isMine) {
-    if (!gBoard[i][j].minesAroundCount) expandShown(i, j);
-    else gBoard[i][j].isShown = true;
+    gGame.lastMove = [{ i, j }];
+    if (!gBoard[i][j].minesAroundCount) {
+      expandShown(i, j);
+      gGame.moves.push(gGame.lastMove);
+    } else {
+      gGame.moves.push(gGame.lastMove);
+      gBoard[i][j].isShown = true;
+      gGame.shownCount++;
+    }
   } else {
     gGame.liveCount--;
+    gGame.moves.push({ i, j });
     gElLiveCount.innerText = `Lives: ${gGame.liveCount}`;
     elCell.classList.add('mine');
     gBoard[i][j].isShown = true;
@@ -88,10 +105,15 @@ function cellClicked(elCell, i, j) {
 }
 
 function cellMarked(elCell) {
+  if (!gInterval) return;
   var cellCoord = getCoordByElement(elCell);
   if (gBoard[cellCoord.i][cellCoord.j].isMarked) {
     gBoard[cellCoord.i][cellCoord.j].isMarked = false;
-  } else gBoard[cellCoord.i][cellCoord.j].isMarked = true;
+    gGame.markedCount--;
+  } else {
+    gBoard[cellCoord.i][cellCoord.j].isMarked = true;
+    gGame.markedCount++;
+  }
 
   renderBoard();
 }
@@ -100,17 +122,49 @@ function expandShown(i, j) {
   if (gBoard[i][j].isShown) return;
   if (gBoard[i][j].isMine) return;
   gBoard[i][j].isShown = true;
+  // gGame.shownCount++;
   for (var x = -1; x <= 1; x++) {
     for (var y = -1; y <= 1; y++) {
       var nI = x + i;
       var nJ = y + j;
-      if (y === 0 && x === 0) continue;
+      // if (y === 0 && x === 0) continue;
       if (nI >= 0 && nI < gLevel.size && nJ >= 0 && nJ < gLevel.size) {
+        gGame.lastMove.push({ i: nI, j: nJ });
+        gGame.shownCount++;
         if (gBoard[nI][nJ].minesAroundCount === 0) expandShown(nI, nJ);
         else gBoard[nI][nJ].isShown = true;
       }
     }
   }
+}
+
+function undoAction() {
+  if (!gInterval || !gGame.shownCount) return;
+  var lastMove = gGame.moves.pop();
+  if (!lastMove.length) {
+    var cell = gBoard[lastMove.i][lastMove.j];
+    cell.isShown = false;
+    gGame.shownCount--;
+    if (cell.isMine) {
+      var elCell = getElementByCoord(lastMove);
+      elCell.classList.remove('mine');
+    }
+    renderBoard();
+    return;
+  }
+  for (var i = 0; i < lastMove.length; i++) {
+    var moveCoord = lastMove[i];
+    var cell = gBoard[moveCoord.i][moveCoord.j];
+    // debugger;
+    cell.isShown = false;
+    gGame.shownCount--;
+    if (cell.isMine) {
+      var elCell = getElementByCoord(lastMove);
+      console.log('elCell', elCell);
+      elCell.classList.remove('mine');
+    }
+  }
+  renderBoard();
 }
 
 function getHint(elBtn) {
@@ -147,11 +201,11 @@ function gameOver() {
   if (checkGameOver()) {
     console.log('You Won');
     clearInterval(gInterval);
-    gElEmoji.src = 'imgs/win.png';
+    gElEmoji.src = 'assets/imgs/win.png';
     gGame.isOn = false;
   } else {
     clearInterval(gInterval);
-    gElEmoji.src = 'imgs/hit.png';
+    gElEmoji.src = 'assets/imgs/hit.png';
     gGame.isOn = false;
   }
 }

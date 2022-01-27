@@ -41,21 +41,28 @@ function renderBoard() {
     for (var j = 0; j < gLevel.size; j++) {
       var cell = gBoard[i][j];
       var size = boardDimension / gLevel.size;
+      var cellContent = `<img src="assets/imgs/cover.png"`;
 
       var cellId = `cell-${i}-${j}`;
       var className = `cell`;
       var clickHandler = `onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this)"`;
       var style = `width:${size}em; height:${size}em`;
 
-      if (cell.isMarked) className += ' mark';
+      if (cell.isMarked) cellContent = `<img src="assets/imgs/flag.png"`;
       if (cell.isShown) {
-        if (gHintMode) className += ' exposed';
-        if (!cell.isMine) className += ' exposed';
-        else className += ' mine';
+        if (gHintMode) {
+          cellContent = cell.minesAroundCount
+            ? `<img src="assets/imgs/num${cell.minesAroundCount}.png"`
+            : `<img src="assets/imgs/black-bomb.png"`;
+        }
+        if (!cell.isMine) {
+          cellContent = cell.minesAroundCount
+            ? `<img src="assets/imgs/num${cell.minesAroundCount}.png"`
+            : `<img src="assets/imgs/empty.png"`;
+        } else cellContent = `<img src="assets/imgs/black-bomb.png"`;
+        if (!gGame.isOn) className += cell.isMine ? ' mine' : '';
       }
-      if (!gGame.isOn) className += cell.isMine ? ' mine' : '';
-
-      strHTML += `<td><div id=${cellId} ${clickHandler} style = "${style}" class="${className}">${cell.minesAroundCount}</div></td>`;
+      strHTML += `<td><div id=${cellId} ${clickHandler} style = "${style}" class="${className}">${cellContent}</div></td>`;
     }
     strHTML += '</tr>';
   }

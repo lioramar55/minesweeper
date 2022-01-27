@@ -58,21 +58,12 @@ body {
 }
 
 .cell {
-  background-color: rgb(100, 55, 66);
-  margin: 3px;
+  margin: 2px;
   color: transparent;
   cursor: pointer;
 }
-
-.cell.mark {
-  background-color: #fea;
-}
-.cell.exposed {
-  color: #333;
-  background: #f7f7f7;
-}
-.cell.mine {
-  background-color: #f00;
+img {
+  height: 100%;
 }
 
 .btn-section {

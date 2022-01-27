@@ -4,6 +4,10 @@ function inBounds(i, j, size) {
   return false;
 }
 
+function clone2DArray(mat) {
+  return mat.map((inner) => inner.slice());
+}
+
 function numRange(start, finish, step) {
   var nums = [];
   for (var i = start; i < finish; i += step) {
