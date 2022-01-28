@@ -4,6 +4,7 @@ var gSound = false;
 var bombSound = new Audio('assets/sound/bomb-sound.wav');
 var flagSound = new Audio('assets/sound/flag-sound.wav');
 var uncoverSound = new Audio('assets/sound/uncover-sound.wav');
+var unmuteSound = new Audio('assets/sound/sound.wav');
 var gInterval, gCounter, gElSecs, gElMins;
 var gSecs, gMins;
 var gFlagImg = `<img src="assets/imgs/flag.png" />`;
@@ -84,7 +85,7 @@ function initGame() {
     /*check if local storage for this this time difficulty*/
     gElBestTime.innerText = localStorage.getItem(`best-time-${gLevel.name}`);
   } else {
-    gElBestTime.innerText = `Not exist, Try to play...`;
+    gElBestTime.innerText = `Do not exist, try playing :)`;
   }
   gGame.moves.push(clone2DArray(gBoard));
 }
@@ -205,6 +206,7 @@ function revealBombs() {
 }
 function toggleSound(elImg) {
   if (gSound) {
+    unmuteSound.play();
     elImg.src = 'assets/imgs/mute.png';
     gSound = false;
   } else {
