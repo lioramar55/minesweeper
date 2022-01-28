@@ -246,7 +246,7 @@ function revealHint(i, j, toReveal = true) {
   renderBoard();
 }
 function safeClick(elBtn) {
-  if (!gInterval || !gGame.safeClicks || checkForHiddenBombs()) return;
+  if (!gInterval || !gGame.safeClicks || !checkForHiddenBombs()) return;
   gGame.safeClicks--;
   elBtn.innerText = `Safe Click: ${gGame.safeClicks}`;
   var isOk = false;
