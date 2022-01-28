@@ -188,6 +188,9 @@ function undoAction() {
     gGame.shownCount--;
     if (cell.isMine) {
       var elCell = getElementByCoord(lastMove);
+      gGame.liveCount++;
+      if (gGame.liveCount === 3) gElEmoji.src = `assets/imgs/start.png`;
+      gElLiveCount.innerHTML = gLivesImg.repeat(gGame.liveCount);
       elCell.classList.remove('mine');
     }
     renderBoard();

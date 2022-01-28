@@ -44,15 +44,15 @@ var gLevel = gLevels[0];
 var gBoard;
 
 function init() {
-  gBoard = buildBoard(gLevel);
-  if (gInterval) clearInterval(gInterval);
-  loadElements();
-  if (gSevenBoomMode) loadSevenBoomMode();
+  gBoard = buildBoard(gLevel); // building board
+  initGame(); // initilize variables, load dom elements
+  gElBombCount.innerText = gLevel.mines; // setting num of bomb count
   renderBoard();
-  gElBombCount.innerText = gLevel.mines;
 }
 
-function loadElements() {
+function initGame() {
+  if (gInterval) clearInterval(gInterval); //checking if init was called in the middle of an interval
+  if (gSevenBoomMode) loadSevenBoomMode(); // checking if init was called from gSevenBoomMode
   gInterval = null;
   gGame.isOn = true;
   gGame.secsPassed = 0;
@@ -81,21 +81,12 @@ function loadElements() {
   gElMins.innerText = '00';
   gElSecs.innerText = '00';
   if (localStorage.getItem(`best-time-${gLevel.name}`)) {
+    /*check if local storage for this this time difficulty*/
     gElBestTime.innerText = localStorage.getItem(`best-time-${gLevel.name}`);
   } else {
     gElBestTime.innerText = `Not exist, Try to play...`;
   }
   gGame.moves.push(clone2DArray(gBoard));
-}
-
-function toggleSound(elImg) {
-  if (gSound) {
-    elImg.src = 'assets/imgs/mute.png';
-    gSound = false;
-  } else {
-    elImg.src = 'assets/imgs/sound.png';
-    gSound = true;
-  }
 }
 
 function buildBoard(level) {
@@ -210,5 +201,14 @@ function revealBombs() {
         renderCell(i, j, gRedBomb);
       }
     }
+  }
+}
+function toggleSound(elImg) {
+  if (gSound) {
+    elImg.src = 'assets/imgs/mute.png';
+    gSound = false;
+  } else {
+    elImg.src = 'assets/imgs/sound.png';
+    gSound = true;
   }
 }
