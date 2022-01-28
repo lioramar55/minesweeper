@@ -4,10 +4,10 @@
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif;
   text-align: center;
-  font-size: 20px;
+  font-size: 18px;
 }
 h1 {
-  font-size: 1.5em;
+  font-size: 1.2em;
   margin: 1%;
 }
 body {
@@ -34,9 +34,6 @@ body {
   background-color: #777;
 }
 
-.col {
-  width: 25em;
-}
 .info span {
   font-size: 1.15em;
   vertical-align: middle;
@@ -51,9 +48,16 @@ body {
   left: 5%;
   cursor: pointer;
 }
+.live-count {
+  position: absolute;
+  left: 15%;
+}
+.bomb-info {
+  position: absolute;
+  right: 25%;
+}
 .icon {
-  margin-top: 2%;
-  height: 2em;
+  height: 2.2em;
 }
 
 .emoji {
@@ -61,8 +65,7 @@ body {
 }
 
 .cell {
-  margin: 2px;
-  color: transparent;
+  margin: 1%;
   cursor: pointer;
 }
 

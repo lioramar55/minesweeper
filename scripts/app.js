@@ -1,6 +1,9 @@
 'use strict';
 
 var gSound = false;
+var bombSound = new Audio('assets/sound/bomb-sound.wav');
+var flagSound = new Audio('assets/sound/flag-sound.wav');
+var uncoverSound = new Audio('assets/sound/uncover-sound.wav');
 var gInterval, gCounter, gElSecs, gElMins;
 var gSecs, gMins;
 var gFlagImg = `<img src="assets/imgs/flag.png" />`;
@@ -8,13 +11,89 @@ var gEmptyImg = `<img src="assets/imgs/empty.png" />`;
 var gCoverImg = `<img src="assets/imgs/cover.png" />`;
 var gBlackBomb = `<img src="assets/imgs/black-bomb.png" />`;
 var gRedBomb = `<img src="assets/imgs/red-bomb.png" />`;
+var gLiveImg = `<img class='icon' src="assets/imgs/live.png" />`;
+
+var gGame = {
+  isOn: false,
+  liveCount: 3,
+  shownCount: 0,
+  markedCount: 0,
+  secsPassed: 0,
+  hintsLeft: 3,
+  safeClicks: 3,
+  lastMove: null,
+  isManual: false,
+  moves: [],
+};
+var gLevels = [
+  { name: 'easy', size: 4, mines: 2 },
+  { name: 'medium', size: 8, mines: 12 },
+  { name: 'hard', size: 12, mines: 30 },
+];
+var gElBestTime;
+var gSevenBoomMode;
+var gManualBombCount, gElManualBtn;
+var gElBombCount, gElEmoji;
+var gElCell, gElBoard;
+var gElLiveCount;
+var gElHint,
+  gHintMode,
+  gHintCells = [];
+var gElUndo, gUndo;
+var gLevel = gLevels[0];
+var gBoard;
+
+function init() {
+  gBoard = buildBoard(gLevel);
+  if (gInterval) clearInterval(gInterval);
+  loadElements();
+  if (gSevenBoomMode) loadSevenBoomMode();
+  renderBoard();
+  gElBombCount.innerText = gLevel.mines;
+}
+
+function loadElements() {
+  gInterval = null;
+  gGame.isOn = true;
+  gGame.secsPassed = 0;
+  gGame.moves = [];
+  gGame.lastMove = null;
+  gGame.liveCount = 3;
+  gGame.markedCount = 0;
+  gGame.shownCount = 0;
+  gGame.hintsLeft = 3;
+  gGame.isManual = false;
+  gElBombCount = document.querySelector('.bomb-count');
+  gElEmoji = document.querySelector('.emoji');
+  gElMins = document.querySelector('.minutes');
+  gElSecs = document.querySelector('.seconds');
+  gElHint = document.querySelector('.hint');
+  gElLiveCount = document.querySelector('.live-count');
+  gElBoard = document.querySelector('.board');
+  gElUndo = document.querySelector('.undo');
+  gElManualBtn = document.querySelector('.manual');
+  gElBestTime = document.querySelector('.best-score');
+  gManualBombCount = 0;
+  gElManualBtn.innerText = `Manual (${gManualBombCount}/${gLevel.mines})`;
+  gElEmoji.src = 'assets/imgs/start.png';
+  gElLiveCount.innerHTML = gLiveImg.repeat(gGame.liveCount);
+  gElHint.innerText = `Hints: ${gGame.hintsLeft}`;
+  gElMins.innerText = '00';
+  gElSecs.innerText = '00';
+  if (localStorage.getItem(`best-time-${gLevel.name}`)) {
+    gElBestTime.innerText = localStorage.getItem(`best-time-${gLevel.name}`);
+  } else {
+    gElBestTime.innerText = `Not exist, Try to play...`;
+  }
+  gGame.moves.push(clone2DArray(gBoard));
+}
 
 function toggleSound(elImg) {
   if (gSound) {
-    elImg.src = 'imgs/mute.png';
+    elImg.src = 'assets/imgs/mute.png';
     gSound = false;
   } else {
-    elImg.src = 'imgs/sound.png';
+    elImg.src = 'assets/imgs/sound.png';
     gSound = true;
   }
 }
