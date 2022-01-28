@@ -10,7 +10,16 @@ function inBounds(i, j, size) {
   if (i >= 0 && i < size && j >= 0 && j < size) return true;
   return false;
 }
+function getElementByCoord(coord) {
+  var selector = `#cell-${coord.i}-${coord.j}`;
+  return document.querySelector(selector);
+}
 
+function getCoordByElement(el) {
+  var i = el.id.split('-')[1];
+  var j = el.id.split('-')[2];
+  return { i, j };
+}
 function clone2DArray(mat) {
   return mat.map((inner) => inner.slice());
 }

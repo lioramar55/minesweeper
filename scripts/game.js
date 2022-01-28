@@ -7,7 +7,7 @@ function setMinesNegsCount(cellCoord) {
       var nI = cellCoord.i + i;
       var nJ = cellCoord.j + j;
       if (i === 0 && j === 0) continue;
-      if (nI >= 0 && nI < gLevel.size && nJ >= 0 && nJ < gLevel.size) {
+      if (inBounds(nI, nJ, gLevel.size)) {
         if (gBoard[nI][nJ].isMine) count++;
       }
     }
@@ -162,7 +162,7 @@ function expandShown(i, j) {
     for (var y = -1; y <= 1; y++) {
       var nI = x + i;
       var nJ = y + j;
-      if (nI >= 0 && nI < gLevel.size && nJ >= 0 && nJ < gLevel.size) {
+      if (inBounds(nI, nJ, gLevel.size)) {
         gGame.lastMove.push({ i: nI, j: nJ });
         gGame.shownCount++;
         if (gBoard[nI][nJ].isMarked) {
@@ -215,23 +215,6 @@ function manualMode() {
   gGame.isManual = true;
 }
 
-function safeClick(elBtn) {
-  if (!gInterval || !gGame.safeClicks || checkForHiddenBombs()) return;
-  gGame.safeClicks--;
-  elBtn.innerText = `Safe Click: ${gGame.safeClicks}`;
-  var isOk = false;
-  while (!isOk) {
-    var randI = getRandomIntInclusive(0, gLevel.size - 1);
-    var randJ = getRandomIntInclusive(0, gLevel.size - 1);
-    var currCell = gBoard[randI][randJ];
-    if (!currCell.isShown && !currCell.isMine) {
-      isOk = true;
-      renderCell(randI, randJ, gEmptyImg);
-      setTimeout(renderCell, 1000, randI, randJ, gCoverImg);
-    }
-  }
-}
-
 function getHint() {
   if (!gGame.hintsLeft || !gInterval) return;
   gHintMode = true;
@@ -262,7 +245,22 @@ function revealHint(i, j, toReveal = true) {
   }
   renderBoard();
 }
-
+function safeClick(elBtn) {
+  if (!gInterval || !gGame.safeClicks || checkForHiddenBombs()) return;
+  gGame.safeClicks--;
+  elBtn.innerText = `Safe Click: ${gGame.safeClicks}`;
+  var isOk = false;
+  while (!isOk) {
+    var randI = getRandomIntInclusive(0, gLevel.size - 1);
+    var randJ = getRandomIntInclusive(0, gLevel.size - 1);
+    var currCell = gBoard[randI][randJ];
+    if (!currCell.isShown && !currCell.isMine) {
+      isOk = true;
+      renderCell(randI, randJ, gEmptyImg);
+      setTimeout(renderCell, 1000, randI, randJ, gCoverImg);
+    }
+  }
+}
 function checkForHiddenBombs() {
   for (var i = 0; i < gLevel.size; i++) {
     for (var j = 0; j < gLevel.size; j++) {

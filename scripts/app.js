@@ -158,12 +158,11 @@ function changeLevel(level) {
   if (!level) {
     var size = +prompt('Enter the size(n) of field you want(n*n): ');
     var mines = +prompt('Enter the number of mines');
-    if (mines >= size ** 2) {
-      confirm('The number of mines should be lower than size*size');
+    if (mines >= size ** 2 || size >= 33) {
+      confirm('Size limits (0-33) and mines should be lower than size*size');
       return;
     } else {
       gLevel = { size, mines };
-      init();
     }
   } else gLevel = gLevels[level - 1];
   init();
@@ -201,15 +200,4 @@ function randomizeMines(i, j) {
       count--;
     }
   }
-}
-
-function getElementByCoord(coord) {
-  var selector = `#cell-${coord.i}-${coord.j}`;
-  return document.querySelector(selector);
-}
-
-function getCoordByElement(el) {
-  var i = el.id.split('-')[1];
-  var j = el.id.split('-')[2];
-  return { i, j };
 }
