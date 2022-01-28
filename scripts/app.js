@@ -11,7 +11,7 @@ var gEmptyImg = `<img src="assets/imgs/empty.png" />`;
 var gCoverImg = `<img src="assets/imgs/cover.png" />`;
 var gBlackBomb = `<img src="assets/imgs/black-bomb.png" />`;
 var gRedBomb = `<img src="assets/imgs/red-bomb.png" />`;
-var gLiveImg = `<img class='icon' src="assets/imgs/live.png" />`;
+var gLivesImg = `<img class='icon' src="assets/imgs/live.png" />`;
 
 var gGame = {
   isOn: false,
@@ -76,7 +76,7 @@ function loadElements() {
   gManualBombCount = 0;
   gElManualBtn.innerText = `Manual (${gManualBombCount}/${gLevel.mines})`;
   gElEmoji.src = 'assets/imgs/start.png';
-  gElLiveCount.innerHTML = gLiveImg.repeat(gGame.liveCount);
+  gElLiveCount.innerHTML = gLivesImg.repeat(gGame.liveCount);
   gElHint.innerText = `Hints: ${gGame.hintsLeft}`;
   gElMins.innerText = '00';
   gElSecs.innerText = '00';
@@ -198,6 +198,17 @@ function randomizeMines(i, j) {
     else {
       gBoard[randI][randJ].isMine = true;
       count--;
+    }
+  }
+}
+function revealBombs() {
+  for (var i = 0; i < gLevel.size; i++) {
+    for (var j = 0; j < gLevel.size; j++) {
+      var cell = gBoard[i][j];
+      if (cell.isMine && !cell.isShown) {
+        cell.isShown = true;
+        renderCell(i, j, gRedBomb);
+      }
     }
   }
 }

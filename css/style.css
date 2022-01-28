@@ -6,30 +6,44 @@
   text-align: center;
   font-size: 18px;
   color: #e3f0ff;
-  /* color: linear-gradient(to left top, #ffffff, #d1c7ff, #a38ffd, #6f58f6, #1712eb); */
 }
-h1 {
-  font-size: 1.2em;
-  margin: 1%;
-}
+
 body {
+  background: #ff416c; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #ff4b2b,
+    #ff416c
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
   margin: 0;
-  background-image: linear-gradient(to left top, #22b28d, #00a1b3, #008bea, #006aff, #1712eb);
   display: flex;
   align-items: center;
   font-size: 2rem;
   flex-direction: column;
 }
-
+h1 {
+  font-size: 1.1em;
+  margin: 0.3%;
+}
+h2 {
+  margin: 0.3%;
+}
 .info {
   position: relative;
+  -webkit-box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
+  box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
   margin-top: 0.5%;
+  margin-bottom: 0.5%;
   padding: 0.25em;
   width: 30em;
   background-color: rgb(37, 96, 190);
   border-radius: 1em;
 }
 .board {
+  -webkit-box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
+  box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
   position: relative;
   left: 0;
   right: 0;
@@ -37,7 +51,6 @@ body {
   gap: 4px;
   margin: 10px;
   border-radius: 1em;
-
   background-color: rgb(37, 96, 190);
 }
 
@@ -99,5 +112,5 @@ img {
 }
 
 footer {
-  margin-top: 2%;
+  margin-top: 0.5%;
 }

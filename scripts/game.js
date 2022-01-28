@@ -70,9 +70,10 @@ function cellClicked(elCell, i, j) {
       return;
     }
     if (gSound) bombSound.play();
+    gElEmoji.src = `assets/imgs/hit.png`;
     gGame.liveCount--;
     gGame.moves.push({ i, j });
-    gElLiveCount.innerHTML = gLiveImg.repeat(gGame.liveCount);
+    gElLiveCount.innerHTML = gLivesImg.repeat(gGame.liveCount);
     elCell.classList.add('mine');
     gBoard[i][j].isShown = true;
   }
@@ -132,8 +133,9 @@ function gameOver(isPlayerWin) {
       }
     }
   } else {
+    revealBombs();
     clearInterval(gInterval);
-    gElEmoji.src = 'assets/imgs/hit.png';
+    gElEmoji.src = `assets/imgs/dead.png`;
     gGame.isOn = false;
   }
 }
