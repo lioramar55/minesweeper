@@ -22,7 +22,9 @@ var gManualBombCount, gElManualBtn;
 var gElBombCount, gElEmoji;
 var gElCell, gElBoard;
 var gElLiveCount;
-var gElHint, gHintMode;
+var gElHint,
+  gHintMode,
+  gHintCells = [];
 var gElUndo, gUndo;
 var gLevel = gLevels[0];
 var gBoard;
@@ -118,10 +120,11 @@ function cellClicked(elCell, i, j) {
     }
   }
   if (gHintMode) {
+    gHintCells = [];
     var elBtn = document.querySelector('.hint');
     elBtn.innerText = `Hints: ${--gGame.hintsLeft}`;
-    setTimeout(revealHint, 1000, i, j);
     revealHint(i, j);
+    setTimeout(revealHint, 1000, i, j, false);
     gHintMode = false;
     return;
   }
@@ -222,12 +225,10 @@ function expandShown(i, j) {
   if (gBoard[i][j].isShown) return;
   if (gBoard[i][j].isMine) return;
   gBoard[i][j].isShown = true;
-  // gGame.shownCount++;
   for (var x = -1; x <= 1; x++) {
     for (var y = -1; y <= 1; y++) {
       var nI = x + i;
       var nJ = y + j;
-      // if (y === 0 && x === 0) continue;
       if (nI >= 0 && nI < gLevel.size && nJ >= 0 && nJ < gLevel.size) {
         gGame.lastMove.push({ i: nI, j: nJ });
         gGame.shownCount++;
@@ -303,17 +304,27 @@ function getHint() {
   gHintMode = true;
 }
 
-function revealHint(i, j) {
-  gBoard[i][j].isShown = gBoard[i][j].isShown ? false : true;
-  for (var x = -1; x <= 1; x++) {
-    for (var y = -1; y <= 1; y++) {
-      var nI = x + i;
-      var nJ = j + y;
-      if (y === 0 && x === 0) continue;
-      // if (gBoard[nI][nJ].isShown) continue;
-      if (inBounds(nI, nJ, gLevel.size)) {
-        gBoard[nI][nJ].isShown = gBoard[nI][nJ].isShown ? false : true;
+function revealHint(i, j, toReveal = true) {
+  if (toReveal) {
+    gBoard[i][j].isShown = true;
+    for (var x = -1; x <= 1; x++) {
+      for (var y = -1; y <= 1; y++) {
+        var nI = x + i;
+        var nJ = j + y;
+        if (y === 0 && x === 0) continue;
+        if (inBounds(nI, nJ, gLevel.size)) {
+          if (gBoard[nI][nJ].isShown) continue;
+          gBoard[nI][nJ].isShown = true;
+          gHintCells.push({ i: nI, j: nJ });
+        }
       }
+    }
+  } else {
+    gBoard[i][j].isShown = false;
+    console.log('Hey');
+    for (var i = 0; i < gHintCells.length; i++) {
+      var currCoord = gHintCells[i];
+      gBoard[currCoord.i][currCoord.j].isShown = false;
     }
   }
   renderBoard();
