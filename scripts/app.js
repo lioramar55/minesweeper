@@ -210,6 +210,7 @@ function toggleSound(elImg) {
     elImg.src = 'assets/imgs/mute.png';
     gSound = false;
   } else {
+    unmuteSound.play();
     elImg.src = 'assets/imgs/sound.png';
     gSound = true;
   }
