@@ -5,6 +5,8 @@
   font-family: 'Roboto', sans-serif;
   text-align: center;
   font-size: 18px;
+  color: #e3f0ff;
+  /* color: linear-gradient(to left top, #ffffff, #d1c7ff, #a38ffd, #6f58f6, #1712eb); */
 }
 h1 {
   font-size: 1.2em;
@@ -12,12 +14,11 @@ h1 {
 }
 body {
   margin: 0;
-  background-color: #333;
+  background-image: linear-gradient(to left top, #22b28d, #00a1b3, #008bea, #006aff, #1712eb);
   display: flex;
   align-items: center;
   font-size: 2rem;
   flex-direction: column;
-  color: rgb(241, 235, 235);
 }
 
 .info {
@@ -25,13 +26,19 @@ body {
   margin-top: 0.5%;
   padding: 0.25em;
   width: 30em;
-  background-color: rgb(145, 146, 148);
+  background-color: rgb(37, 96, 190);
+  border-radius: 1em;
 }
 .board {
+  position: relative;
+  left: 0;
+  right: 0;
   padding: 10px;
   gap: 4px;
   margin: 10px;
-  background-color: #777;
+  border-radius: 1em;
+
+  background-color: rgb(37, 96, 190);
 }
 
 .info span {
@@ -77,7 +84,6 @@ img {
   position: relative;
   left: 0;
   right: 0;
-  bottom: 1.5%;
 }
 .btn {
   cursor: pointer;
@@ -86,8 +92,10 @@ img {
   font-size: 0.7em;
   margin-bottom: 0.1em;
   border: none;
-  background-color: rgb(224, 80, 116);
-  color: white;
+  background-color: rgb(109, 33, 54);
+}
+.btn:hover {
+  background-color: rgb(109, 33, 54, 0.75);
 }
 
 footer {

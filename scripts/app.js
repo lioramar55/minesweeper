@@ -155,7 +155,17 @@ function createCell() {
 }
 
 function changeLevel(level) {
-  gLevel = gLevels[level - 1];
+  if (!level) {
+    var size = +prompt('Enter the size(n) of field you want(n*n): ');
+    var mines = +prompt('Enter the number of mines');
+    if (mines >= size ** 2) {
+      confirm('The number of mines should be lower than size*size');
+      return;
+    } else {
+      gLevel = { size, mines };
+      init();
+    }
+  } else gLevel = gLevels[level - 1];
   init();
 }
 function startCounter() {
