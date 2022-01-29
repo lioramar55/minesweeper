@@ -1,19 +1,4 @@
 'use strict';
-
-var gSound = false;
-var bombSound = new Audio('assets/sound/bomb-sound.wav');
-var flagSound = new Audio('assets/sound/flag-sound.wav');
-var uncoverSound = new Audio('assets/sound/uncover-sound.wav');
-var unmuteSound = new Audio('assets/sound/sound.wav');
-var gInterval, gCounter, gElSecs, gElMins;
-var gSecs, gMins;
-var gFlagImg = `<img src="assets/imgs/flag.png" />`;
-var gEmptyImg = `<img src="assets/imgs/empty.png" />`;
-var gCoverImg = `<img src="assets/imgs/cover.png" />`;
-var gBlackBomb = `<img src="assets/imgs/black-bomb.png" />`;
-var gRedBomb = `<img src="assets/imgs/red-bomb.png" />`;
-var gLivesImg = `<img class='icon' src="assets/imgs/live.png" />`;
-
 var gGame = {
   isOn: false,
   liveCount: 3,
@@ -31,18 +16,31 @@ var gLevels = [
   { name: 'medium', size: 8, mines: 12 },
   { name: 'hard', size: 12, mines: 30 },
 ];
+var gLevel = gLevels[0];
+var gBoard;
+var gSound = false;
+var gElHint,
+  gHintMode,
+  gHintCells = [];
+var gInterval, gCounter, gElSecs, gElMins;
+var gSecs, gMins;
 var gElBestTime;
 var gSevenBoomMode;
 var gManualBombCount, gElManualBtn;
 var gElBombCount, gElEmoji;
 var gElCell, gElBoard;
 var gElLiveCount;
-var gElHint,
-  gHintMode,
-  gHintCells = [];
 var gElUndo, gUndo;
-var gLevel = gLevels[0];
-var gBoard;
+var gFlagImg = `<img src="assets/imgs/flag.png" />`;
+var gEmptyImg = `<img src="assets/imgs/empty.png" />`;
+var gCoverImg = `<img src="assets/imgs/cover.png" />`;
+var gBlackBomb = `<img src="assets/imgs/black-bomb.png" />`;
+var gRedBomb = `<img src="assets/imgs/red-bomb.png" />`;
+var gLivesImg = `<img class='icon' src="assets/imgs/live.png" />`;
+var bombSound = new Audio('assets/sound/bomb-sound.wav');
+var flagSound = new Audio('assets/sound/flag-sound.wav');
+var uncoverSound = new Audio('assets/sound/uncover-sound.wav');
+var unmuteSound = new Audio('assets/sound/sound.wav');
 
 function init() {
   gBoard = buildBoard(gLevel); // building board
@@ -56,6 +54,7 @@ function initGame() {
   if (gSevenBoomMode) loadSevenBoomMode(); // checking if init was called from gSevenBoomMode
   gInterval = null;
   gGame.isOn = true;
+  gGame.safeClicks = 3;
   gGame.secsPassed = 0;
   gGame.moves = [];
   gGame.lastMove = null;
@@ -103,18 +102,15 @@ function buildBoard(level) {
 
 function renderBoard() {
   var strHTML = '<table>';
-  var boardDimension = gLevel.size * 2;
   for (var i = 0; i < gLevel.size; i++) {
     strHTML += `<tr class="col col${i}">`;
     for (var j = 0; j < gLevel.size; j++) {
       var cell = gBoard[i][j];
-      var size = boardDimension / gLevel.size;
       var cellContent = gCoverImg;
       var cellId = `cell-${i}-${j}`;
       var className = `cell`;
       var clickHandler = `onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this, ${i}, ${j})"`;
-      var style = `width:${size}em; height:${size}em`;
-
+      var style = '';
       if (cell.isMarked) cellContent = gFlagImg;
       if (cell.isShown) {
         if (gHintMode) {
@@ -129,7 +125,7 @@ function renderBoard() {
         } else cellContent = gBlackBomb;
         if (!gGame.isOn && cell.isMine) cellContent = gRedBomb;
       }
-      strHTML += `<td><div id=${cellId} ${clickHandler} style = "${style}" class="${className}">${cellContent}</div></td>`;
+      strHTML += `<td><div id=${cellId} ${clickHandler} ${style} class="${className}">${cellContent}</div></td>`;
     }
     strHTML += '</tr>';
   }
@@ -147,16 +143,7 @@ function createCell() {
 }
 
 function changeLevel(level) {
-  if (!level) {
-    var size = +prompt('Enter the size(n) of field you want(n*n): ');
-    var mines = +prompt('Enter the number of mines');
-    if (mines >= size ** 2 || size >= 33) {
-      confirm('Size limits (0-33) and mines should be lower than size*size');
-      return;
-    } else {
-      gLevel = { size, mines };
-    }
-  } else gLevel = gLevels[level - 1];
+  gLevel = gLevels[level - 1];
   init();
 }
 function startCounter() {
@@ -206,7 +193,6 @@ function revealBombs() {
 }
 function toggleSound(elImg) {
   if (gSound) {
-    unmuteSound.play();
     elImg.src = 'assets/imgs/mute.png';
     gSound = false;
   } else {
