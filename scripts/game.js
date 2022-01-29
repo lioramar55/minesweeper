@@ -252,8 +252,7 @@ function revealHint(i, j, toReveal = true) {
 }
 function safeClick(elBtn) {
   if (!gInterval || !gGame.safeClicks || !checkForHiddenBombs()) return;
-  gGame.safeClicks--;
-  elBtn.innerText = `Safe Click: ${gGame.safeClicks}`;
+  elBtn.innerText = `Safe Click: ${--gGame.safeClicks}`;
   var isOk = false;
   while (!isOk) {
     var randI = getRandomIntInclusive(0, gLevel.size - 1);

@@ -3,7 +3,6 @@
 function renderCell(i, j, value) {
   var selector = `#cell-${i}-${j}`;
   var cell = document.querySelector(selector);
-  console.log('value', value);
   cell.innerHTML = `${value}`;
 }
 function inBounds(i, j, size) {

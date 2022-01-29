@@ -29,6 +29,7 @@ var gSevenBoomMode;
 var gManualBombCount, gElManualBtn;
 var gElBombCount, gElEmoji;
 var gElCell, gElBoard;
+var gElSafeBtn;
 var gElLiveCount;
 var gElUndo, gUndo;
 var gFlagImg = `<img src="assets/imgs/flag.png" />`;
@@ -73,11 +74,13 @@ function initGame() {
   gElUndo = document.querySelector('.undo');
   gElManualBtn = document.querySelector('.manual');
   gElBestTime = document.querySelector('.best-score');
+  gElSafeBtn = document.querySelector('.safe');
   gManualBombCount = 0;
   gElManualBtn.innerText = `Manual (${gManualBombCount}/${gLevel.mines})`;
   gElEmoji.src = 'assets/imgs/start.png';
   gElLiveCount.innerHTML = gLivesImg.repeat(gGame.liveCount);
   gElHint.innerText = `Hints: ${gGame.hintsLeft}`;
+  gElSafeBtn.innerText = `Safe Click: ${gGame.safeClicks}`;
   gElMins.innerText = '00';
   gElSecs.innerText = '00';
   if (localStorage.getItem(`best-time-${gLevel.name}`)) {
