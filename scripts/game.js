@@ -27,8 +27,7 @@ function setMinesNegsCount(cellCoord) {
       if (i === 0 && j === 0) continue;
       // checking if neighbour cell is in a legal coordinates within the matrice bounds
       if (inBounds(nI, nJ, gLevel.size)) {
-        // if it is and it is all a mine than raise the counters value
-        if (gBoard[nI][nJ].isMine) count++;
+        if (gBoard[nI][nJ].isMine) count++; // if it is a mine then raise the counters value
       }
     }
   }

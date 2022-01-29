@@ -48,8 +48,8 @@ h2 span {
   -webkit-box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
   box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
   width: min(30em, 85%);
-  padding: 0.5em;
-  margin: 1em auto;
+  padding: 0.25em;
+  margin: 0.5em auto;
   background-color: #0984e3;
   border-radius: 20px;
   display: flex;
@@ -97,12 +97,11 @@ img {
   -webkit-box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
   box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
   position: relative;
-  margin: 1em auto;
+  margin: 0.5em auto;
   left: 0;
   right: 0;
-  padding: 10px;
-  gap: 4px;
-  max-width: 400px;
+  padding: 0.5em;
+  max-width: 20em;
   border-radius: 1em;
   background-color: #0984e3;
 }
@@ -128,7 +127,7 @@ img {
 
 .btn-section {
   margin: 1em auto;
-  width: min(85%, 500px);
+  width: min(85%, 600px);
   display: flex;
   gap: 0.5em;
   flex-wrap: wrap;
