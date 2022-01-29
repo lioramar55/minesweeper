@@ -8,21 +8,20 @@
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body onload="init()" oncontextmenu="return false;" >
+
     <h1>Minesweeper</h1>
     <h2>Best Time: <span class="best-score"></span></h2>
 
       <div class="info">
         <span><img class="sound icon" onclick="toggleSound(this)" src="assets/imgs/mute.png" /></span>
-        <span class="live-count"></span>
+        <span class="live-count flex"></span>
         <span><img class="icon emoji" onclick="init()" src="assets/imgs/start.png"></span>
-        <span class="bomb-info">
+        <span class="bomb-info flex">
           <span class="bomb-count txt" ></span>
           <span><img class="icon"src="assets/imgs/flag-title.png" /></span>
         </span>
-        <span class="stopwatch">         
-          <div class="txt"><span class="minutes">00</span><span>:</span><span class="seconds">00</span></div>
+          <div class="txt"><span class="minutes txt">00</span><span>:</span><span class="seconds txt">00</span></div>
           <span><img class="icon" src="assets/imgs/timer.png" /></span>
-        </span>
       </div>
     <div class="board">
       
@@ -37,7 +36,9 @@
           <button class="btn manual" onclick="manualMode()">Manual</button>
           <button class="btn seven" onclick="sevenBoomMode()">7 BOOM!</button>
       </div>
+
       <footer>Minesweeper by Lior Refael Amar</footer>
+
       <script src="./scripts/utils.js"></script>
       <script src="./scripts/app.js"></script>
       <script src="./scripts/game.js"></script>

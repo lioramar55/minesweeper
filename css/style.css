@@ -1,3 +1,7 @@
+/*============
+Global Styling
+===============*/
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap');
 
 * {
@@ -10,16 +14,19 @@
 
 body {
   background-color: #fab1a0;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  font-size: 2rem;
-  flex-direction: column;
+  width: max(50%, 450px);
+  margin: 0 auto;
+  font-size: max(30%, 2rem);
 }
+
+/*============
+  typography
+===============*/
+
 h1 {
   font-size: 1.1em;
   margin: 0.3%;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   font-weight: 700;
   color: #2d3436;
@@ -31,14 +38,20 @@ h2 {
 h2 span {
   color: #2d3436;
 }
+
+/*============
+  Game Components
+===============*/
+
+/* Info Navigation-Section*/
 .info {
   -webkit-box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
   box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
-  margin-top: 0.5%;
-  width: 30em;
-  padding: 0.3em;
+  width: min(30em, 85%);
+  padding: 0.5em;
+  margin: 1em auto;
   background-color: #0984e3;
-  border-radius: 1em;
+  border-radius: 20px;
   display: flex;
   justify-content: space-around;
 }
@@ -48,58 +61,24 @@ h2 span {
     padding: 0.5em;
   }
 }
+
 .info > * {
   flex-basis: 100%;
 }
-.board {
-  -webkit-box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
-  box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
-  position: relative;
-  left: 0;
-  right: 0;
-  padding: 10px;
-  gap: 4px;
-  min-width: 330px;
-  max-width: 330px;
-  margin: 5px;
-  border-radius: 1em;
-  background-color: #0984e3;
-}
 
-.col {
-  display: flex;
-}
-.col > * {
-  flex-basis: 100%;
-}
-
-.cell {
-  cursor: pointer;
-}
-.cell img {
-  width: 100%;
-  height: 100%;
-}
-
-.info span {
-  font-size: 1.15em;
-}
-.stopwatch {
-  display: flex;
-}
 .txt {
-  margin-top: auto;
-  margin-bottom: auto;
+  font-size: 1.25em;
+  margin: auto;
 }
+
 .sound {
   cursor: pointer;
 }
-.live-count {
+
+.flex {
   display: flex;
 }
-.bomb-info {
-  display: flex;
-}
+
 .icon {
   height: 2.2em;
 }
@@ -112,32 +91,71 @@ img {
   height: 100%;
 }
 
-.btn-section {
-  margin-top: 10px;
+/* Game Board*/
+
+.board {
+  -webkit-box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
+  box-shadow: 8px 5px 14px 7px rgba(0, 0, 0, 0.75);
+  position: relative;
+  margin: 1em auto;
   left: 0;
   right: 0;
+  padding: 10px;
+  gap: 4px;
+  max-width: 400px;
+  border-radius: 1em;
+  background-color: #0984e3;
+}
+
+/* Columns & Cells*/
+
+.col {
   display: flex;
+}
+.col > * {
+  flex-basis: 100%;
+}
+
+.cell {
+  cursor: pointer;
+}
+
+.cell img {
+  max-width: 100%;
+}
+
+/* Buttons */
+
+.btn-section {
+  margin: 1em auto;
+  width: min(85%, 500px);
+  display: flex;
+  gap: 0.5em;
   flex-wrap: wrap;
 }
+
 .btn-section > * {
   flex: 1 1 12em;
 }
+
 .btn {
   cursor: pointer;
   border-radius: 20px;
-  padding: 0.7em;
-  font-size: 0.7em;
-  margin-bottom: 0.1em;
+  padding: 0.5em;
+  font-size: 0.8em;
   color: white;
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: 700;
   border: none;
-  background: #d63031;
+  background: #a30b0b;
 }
+
 .btn:hover {
   background: #e17055;
 }
+
+/* footer */
 
 footer {
   color: #2d3436;
