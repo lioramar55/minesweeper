@@ -1,4 +1,4 @@
-##Minesweeper
+#Minesweeper
 
 Hello and welcome to[ my minesweeper project](https://lioramar55.github.io/minesweeper)!
 
